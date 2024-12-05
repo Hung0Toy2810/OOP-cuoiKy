@@ -212,16 +212,16 @@ namespace FastFoodManagement
             }
             foreach (var prop in properties)
             {
-                Console.Write($"{prop.Name,-30}"); 
+                Console.Write($"{prop.Name,-20}"); 
             }
             Console.WriteLine();
-            Console.WriteLine(new string('-', properties.Length * 30));
+            Console.WriteLine(new string('-', properties.Length * 20));
             foreach (var item in queryResults)
             {
                 foreach (var prop in properties)
                 {
                     var value = prop.GetValue(item) ?? "NULL";
-                    Console.Write($"{value,-30}");
+                    Console.Write($"{value,-20}");
                 }
                 Console.WriteLine();
             }

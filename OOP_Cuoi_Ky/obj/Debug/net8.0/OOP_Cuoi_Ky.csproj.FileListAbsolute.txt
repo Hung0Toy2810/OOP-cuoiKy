@@ -302,3 +302,4 @@
 /Users/luongnguyenthanhhung/Documents/OOP/OOP_Cuoi_Ky/obj/Debug/net8.0/OOP_Cuoi_Ky.pdb
 /Users/luongnguyenthanhhung/Documents/OOP/OOP_Cuoi_Ky/obj/Debug/net8.0/OOP_Cuoi_Ky.genruntimeconfig.cache
 /Users/luongnguyenthanhhung/Documents/OOP/OOP_Cuoi_Ky/obj/Debug/net8.0/ref/OOP_Cuoi_Ky.dll
+/Users/luongnguyenthanhhung/Documents/OOP/OOP_Cuoi_Ky/obj/Debug/net8.0/OOP_Cuoi_Ky.sourcelink.json
