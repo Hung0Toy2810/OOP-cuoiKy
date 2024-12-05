@@ -20,14 +20,14 @@ namespace FastFoodManagement
 
         public void Start()
         {
-            timer = new System.Timers.Timer(1000); 
-            timer.Elapsed += CheckTime;
+            timer = new System.Timers.Timer(1000); //chu kì 1000ms sẽ thực hiện checktime 1 lần
+            timer.Elapsed += CheckTime;// đăng kí phương thức checktime
             timer.AutoReset = true; 
             timer.Start();
             Console.WriteLine("Timer bắt đầu...");
 
             
-            targetTime = DateTime.Now.AddMinutes(2); 
+            targetTime = DateTime.Now.AddMinutes(2); // thời điểm sự kiện kích hoạt
         }
 
         private void CheckTime(object source, ElapsedEventArgs e)
@@ -35,14 +35,14 @@ namespace FastFoodManagement
             DateTime currentTime = DateTime.Now;
             
             
-            if (currentTime >= targetTime)
+            if (currentTime >= targetTime)//Nếu đến hoặc vượt thời điểm kích hoạt sự kiện thì kích hoạt sự kiện
             {
-                OnChristmasEventTriggered(EventArgs.Empty);  
+                OnChristmasEventTriggered(EventArgs.Empty); //kích hoạt 
                 timer.Stop();  // Dừng timer sau khi sự kiện đã được kích hoạt
             }
         }
 
-        protected virtual void OnChristmasEventTriggered(EventArgs e)
+        protected virtual void OnChristmasEventTriggered(EventArgs e)//phương thức phát đi sự kiện
         {
             ChristmasEventTriggered?.Invoke(this, e); // Kích hoạt sự kiện
             Console.WriteLine("Christmas event đã kích hoạt vào lúc: " + DateTime.Now);
@@ -231,14 +231,14 @@ namespace FastFoodManagement
     {
         static bool isProcessingEvent = false; // Cờ hiệu để kiểm tra xem sự kiện có đang được xử lí hay không (Việc này ở dữ liệu nhỏ thì gần như tức thời nhưng dữ liệu lớn sẽ tốn thời gian)
         static bool isOrderInProgress = false; // Cờ hiệu để theo dõi xem quá trình đặt hàng có đang được diễn ra hay không
-        static object lockObject = new object(); // Đối tượng khóa để ngăn chặn việc thực thi đồng thời việc đặt hàng và xử lí sự kiện (nếu thực hiện đồng thời sẽ gây ra xung đột vì cả hai hàm đều truy cập vào DB)
+        static object lockObject = new object(); // Đối tượng khóa để đồng bộ hóa các luồng (threads).
         static ConcurrentQueue<Action> eventQueue = new ConcurrentQueue<Action>(); // Queue để chứa các hành động 
         public static void Main(string[] args)
         {           
             using (var context = new FastFoodContext())
             {
-                Truy_Van_DB(context);
-                //RunProgram(context);
+                //Truy_Van_DB(context);
+                RunProgram(context);
             }
         }
         public static void Truy_Van_DB(FastFoodContext context)
@@ -410,24 +410,25 @@ namespace FastFoodManagement
             context.Employees.AddRange(employees);
             context.SaveChanges();
 
-            ChristmasEventScheduler scheduler = new ChristmasEventScheduler();
-            scheduler.ChristmasEventTriggered += HandleChristmasEvent;
-            scheduler.Start();
+            ChristmasEventScheduler scheduler = new ChristmasEventScheduler();//Tạo một phiên bản của ChristmasEventScheduler và đăng ký xử lý sự kiện Giáng Sinh bằng HandleChristmasEvent.
+            scheduler.ChristmasEventTriggered += HandleChristmasEvent;//đăng kí
+            scheduler.Start();//Khởi động timer
 
             
-            Task.Run(() => HandleCustomerOrders(context));  
+            Task.Run(() => HandleCustomerOrders(context));  //Chạy một luồng riêng (Task.Run) để xử lý đơn đặt hàng (HandleCustomerOrders).
             while (true)
             {
-                lock (lockObject)
+                lock (lockObject)//giúp đảm bảo rằng chỉ một luồng duy nhất có thể thực thi đoạn mã bên trong khối
                 {
-                    if (isProcessingEvent && !isOrderInProgress)
+                    if (isProcessingEvent && !isOrderInProgress)//thoả
                     {
                         Console.WriteLine("Đang xử lý ưu đãi Giáng Sinh...");
-                        PromotionForChristmas(context);
+                        PromotionForChristmas(context);//Gọi phương thức PromotionForChristmas(context) để áp dụng ưu đãi.
                         isProcessingEvent = false;
+                        Console.WriteLine("Hoàn tất!");
                     }
                 }
-                if (eventQueue.TryDequeue(out var queuedEvent))
+                if (eventQueue.TryDequeue(out var queuedEvent))//Kiểm tra xem có sự kiện nào trong hàng đợi (eventQueue) cần xử lý không.TryDequeue: Lấy sự kiện đầu tiên trong hàng đợi (nếu có) và gán cho biến queuedEvent.
                 {
                     queuedEvent();
                 }
@@ -437,23 +438,33 @@ namespace FastFoodManagement
         }
         public static void HandleCustomerOrders(FastFoodContext context)
         {
-            while (true)
+            while (true) // Liên tục kiểm tra và xử lý các đơn đặt hàng.
             {
-                lock (lockObject)  
+                Console.WriteLine("Nhấn '1' rồi Enter để bắt đầu đặt hàng...");
+
+                // Đợi người dùng nhập "1"
+                string input = Console.ReadLine();
+                if (input == "1")
                 {
-                    if (!isProcessingEvent && !isOrderInProgress) 
+                    lock (lockObject)
                     {
-                        Console.WriteLine("Đang trong quá trình đặt hàng.");
-                        isOrderInProgress = true;
-                        HandleCustomerOrder(context);
-                        isOrderInProgress = false; 
+                        if (!isProcessingEvent && !isOrderInProgress)
+                        {
+                            Console.WriteLine("Đang trong quá trình đặt hàng...");
+                            isOrderInProgress = true;
+                            HandleCustomerOrder(context); // Gọi hàm xử lý đơn hàng
+                            isOrderInProgress = false;
+                        }
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Lệnh không hợp lệ. Vui lòng nhấn '1' rồi Enter để tiếp tục.");
+                }
 
-                Thread.Sleep(500);
+                Thread.Sleep(500); // Tránh vòng lặp chạy liên tục không cần thiết
             }
         }
-
         public static void HandleCustomerOrder(FastFoodContext context)
         {
             while (true)
@@ -683,14 +694,14 @@ namespace FastFoodManagement
         {
             Console.WriteLine("Sự kiện Giáng Sinh đã được kích hoạt!, Việc thêm ưu đãi sẽ được tiến hành sau khi quá trình đặt hàng kết thúc");
 
-            if (isOrderInProgress)
+            if (isOrderInProgress)//Nếu đang có đơn hàng (isOrderInProgress), sự kiện được thêm vào hàng đợi để xử lý sau.
             {
                 eventQueue.Enqueue(() =>
                 {
                     isProcessingEvent = true;
                 });
             }
-            else
+            else//Nếu không, tiến hành xử lý ngay lập tức.
             {
                 isProcessingEvent = true;
                 Console.WriteLine("Thêm ưu đãi được thực hiện ngay lúc này.");
