@@ -24,7 +24,7 @@ namespace FastFoodManagement
             timer.Elapsed += CheckTime;// đăng kí phương thức checktime
             timer.AutoReset = true; 
             timer.Start();
-            Console.WriteLine("Timer bắt đầu...");
+            Console.WriteLine("Timer bắt đầu...Sự kiện giáng sinh sẽ bắt đầu sau 2 phút");
 
             
             targetTime = DateTime.Now.AddMinutes(2); // thời điểm sự kiện kích hoạt
@@ -237,8 +237,8 @@ namespace FastFoodManagement
         {           
             using (var context = new FastFoodContext())
             {
-                //Truy_Van_DB(context);
-                RunProgram(context);
+                Truy_Van_DB(context);
+                //RunProgram(context);
             }
         }
         public static void Truy_Van_DB(FastFoodContext context)
