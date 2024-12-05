@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Đầu ra là tệp thực thi -->
+    <OutputType>Exe</OutputType>
+    <!-- Sử dụng .NET 8.0 -->
+    <TargetFramework>net8.0</TargetFramework>
+    <!-- Bật tự động sử dụng các namespace thường dùng -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Tắt chế độ nullable (nếu bạn không cần cảnh báo null) -->
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Thư viện Entity Framework Core -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+    <!-- Công cụ EF Core CLI (migration, scaffolding, vv.) -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
