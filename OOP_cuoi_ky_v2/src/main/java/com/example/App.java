@@ -1,3 +1,4 @@
+//mvn exec:java
 package com.example;
 import java.math.BigDecimal;
 import java.util.*;

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Collections.Concurrent;
-
+//dotnet ef database update
 namespace FastFoodManagement
 {
     // Lớp phát đi sự kiện giáng sinh
