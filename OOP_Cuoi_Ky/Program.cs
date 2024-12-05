@@ -13,7 +13,7 @@ namespace FastFoodManagement
     // Lớp phát đi sự kiện giáng sinh
     class ChristmasEventScheduler
     {
-        private static System.Timers.Timer timer;
+        private static System.Timers.Timer timer;//Đối tượng Timer từ thư viện System.Timers
         private DateTime targetTime; 
 
         public event EventHandler ChristmasEventTriggered;  
@@ -424,8 +424,8 @@ namespace FastFoodManagement
                     {
                         Console.WriteLine("Đang xử lý ưu đãi Giáng Sinh...");
                         PromotionForChristmas(context);//Gọi phương thức PromotionForChristmas(context) để áp dụng ưu đãi.
-                        isProcessingEvent = false;
                         Console.WriteLine("Hoàn tất!");
+                        isProcessingEvent = false;
                     }
                 }
                 if (eventQueue.TryDequeue(out var queuedEvent))//Kiểm tra xem có sự kiện nào trong hàng đợi (eventQueue) cần xử lý không.TryDequeue: Lấy sự kiện đầu tiên trong hàng đợi (nếu có) và gán cho biến queuedEvent.
