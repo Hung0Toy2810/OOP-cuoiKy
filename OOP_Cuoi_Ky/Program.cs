@@ -404,7 +404,7 @@ namespace FastFoodManagement
             {
                 new Employee { HoTen = "Nguyen Thi H", ChucVu = "Nhan vien phuc vu", SDT = "0989012345", NgayBatDau = DateTime.Now },
                 new Employee { HoTen = "Tran Thi I", ChucVu = "Quan ly", SDT = "0990123456", NgayBatDau = DateTime.Now },
-                new Employee { HoTen = "Le Thi J", ChucVu = "Nhan vien vien phuc vu", SDT = "0901234567", NgayBatDau = DateTime.Now },
+                new Employee { HoTen = "Le Thi J", ChucVu = "Nhan vien phuc vu", SDT = "0901234567", NgayBatDau = DateTime.Now },
                 new Employee { HoTen = "Pham Thi K", ChucVu = "Nhan vien phuc vu", SDT = "0912345678", NgayBatDau = DateTime.Now }
             };
             context.Employees.AddRange(employees);
